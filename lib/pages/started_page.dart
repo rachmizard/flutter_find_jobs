@@ -61,7 +61,8 @@ class _MyWidgetState extends State<OnboardingPage> {
                                   borderRadius: BorderRadius.circular(66),
                                 ),
                               ),
-                              onPressed: () {},
+                              onPressed: () =>
+                                  Navigator.of(context).pushNamed('/sign-up'),
                               child: Text(
                                 "Get Started",
                                 style: GoogleFonts.poppins(
@@ -87,7 +88,8 @@ class _MyWidgetState extends State<OnboardingPage> {
                                 ),
                               ),
                               onPressed: () {
-                                Navigator.of(context).pushReplacementNamed('/sign-in');
+                                Navigator.of(context)
+                                    .pushReplacementNamed('/sign-in');
                               },
                               child: Text(
                                 "Sign In",
