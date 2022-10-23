@@ -25,7 +25,7 @@ class HotJobCategoryCard extends StatelessWidget {
           color: const Color(0xffF6F7F8),
           borderRadius: BorderRadius.circular(12),
           image: DecorationImage(
-            image: AssetImage(imageUrl),
+            image: NetworkImage(imageUrl),
             fit: BoxFit.cover,
           ),
           gradient: LinearGradient(

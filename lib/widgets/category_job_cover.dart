@@ -6,13 +6,10 @@ import 'package:google_fonts/google_fonts.dart';
 class CategoryJobCover extends StatelessWidget {
   final String imageUrl;
   final String title;
-  final String subtitle;
+  final String? subtitle;
 
   const CategoryJobCover(
-      {super.key,
-      required this.imageUrl,
-      required this.title,
-      required this.subtitle});
+      {super.key, required this.imageUrl, required this.title, this.subtitle});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +24,7 @@ class CategoryJobCover extends StatelessWidget {
                 bottomRight: Radius.circular(32),
               ),
               image: DecorationImage(
-                image: AssetImage(imageUrl),
+                image: NetworkImage(imageUrl),
                 fit: BoxFit.cover,
               ),
             )),
@@ -67,7 +64,7 @@ class CategoryJobCover extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      subtitle,
+                      subtitle ?? "",
                       style: GoogleFonts.poppins(
                         fontSize: 16,
                         fontWeight: FontWeight.w400,

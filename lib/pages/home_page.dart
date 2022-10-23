@@ -3,6 +3,7 @@
 import 'package:find_jobs/models/job_category_model.dart';
 import 'package:find_jobs/models/user_model.dart';
 import 'package:find_jobs/providers/auth_provider.dart';
+import 'package:find_jobs/providers/category_provider.dart';
 import 'package:find_jobs/providers/user_provider.dart';
 import 'package:find_jobs/theme.dart';
 import 'package:find_jobs/widgets/hot_job_category_card.dart';
@@ -25,6 +26,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     var authProvider = Provider.of<AuthProvider>(context);
     var userProvider = Provider.of<UserProvider>(context);
+    var categoryProvider = Provider.of<CategoryProvider>(context);
 
     final List<JobCategoryModel> hotCategories = [
       JobCategoryModel(
@@ -101,37 +103,46 @@ class _HomePageState extends State<HomePage> {
     }
 
     Widget jobCardList() {
-      return SingleChildScrollView(
-        dragStartBehavior: DragStartBehavior.down,
-        scrollDirection: Axis.horizontal,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Row(
-            children: hotCategories.map((category) {
-              return Row(
-                children: [
-                  HotJobCategoryCard(
-                    onTap: () => Navigator.pushNamed(
-                        context, '/job-category-detail',
-                        arguments: JobCategoryModel(
-                            id: category.id,
-                            imageUrl: category.imageUrl,
-                            name: category.name,
-                            subtitle: category.subtitle,
-                            createdAt: category.createdAt,
-                            updatedAt: category.updatedAt)),
-                    imageUrl: category.imageUrl,
-                    title: category.name,
+      return FutureBuilder<List<JobCategoryModel>>(
+          future: categoryProvider.getCategories(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return SingleChildScrollView(
+                dragStartBehavior: DragStartBehavior.down,
+                scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Row(
+                    children: snapshot.data!.map((category) {
+                      return Row(
+                        children: [
+                          HotJobCategoryCard(
+                            onTap: () => Navigator.pushNamed(
+                                context, '/job-category-detail',
+                                arguments: JobCategoryModel(
+                                    id: category.id,
+                                    imageUrl: category.imageUrl,
+                                    name: category.name,
+                                    createdAt: category.createdAt,
+                                    updatedAt: category.updatedAt)),
+                            imageUrl: category.imageUrl!,
+                            title: category.name!,
+                          ),
+                          SizedBox(
+                            width: 16,
+                          )
+                        ],
+                      );
+                    }).toList(),
                   ),
-                  SizedBox(
-                    width: 16,
-                  )
-                ],
+                ),
               );
-            }).toList(),
-          ),
-        ),
-      );
+            }
+
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          });
     }
 
     Widget hotCategoriesSection() {

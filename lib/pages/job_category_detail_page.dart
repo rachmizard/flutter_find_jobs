@@ -25,9 +25,9 @@ class JobCategoryDetailPage extends StatelessWidget {
           child: Column(
             children: [
               CategoryJobCover(
-                  imageUrl: args.imageUrl,
-                  title: args.name,
-                  subtitle: args.subtitle),
+                imageUrl: args.imageUrl!,
+                title: args.name!,
+              ),
               SizedBox(
                 height: sizeBoxScrollHeight,
                 child: SingleChildScrollView(
