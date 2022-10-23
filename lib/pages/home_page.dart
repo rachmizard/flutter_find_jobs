@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               JobTile(
                                   onTap: () => Navigator.of(context)
-                                      .pushNamed('/job-detail'),
+                                      .pushNamed('/job-detail', arguments: job),
                                   job: job),
                               SizedBox(
                                 height: 16,

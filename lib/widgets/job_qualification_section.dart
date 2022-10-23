@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 class JobDetailItemSection extends StatelessWidget {
   final String title;
-  final List<String> qualifications;
+  final List<String> items;
 
   const JobDetailItemSection(
-      {super.key, required this.title, required this.qualifications});
+      {super.key, required this.title, required this.items});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class JobDetailItemSection extends StatelessWidget {
       ),
       Column(
         children: List.generate(
-            qualifications.length,
+            items.length,
             (index) => Column(
                   children: [
                     Row(
@@ -30,7 +30,7 @@ class JobDetailItemSection extends StatelessWidget {
                         const SizedBox(width: 8),
                         Flexible(
                           child: Text(
-                            qualifications[index],
+                            items[index],
                             style: jobQualificationTextStyle,
                           ),
                         )

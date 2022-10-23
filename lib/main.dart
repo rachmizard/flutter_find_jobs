@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         routes: {
           '/': (context) => const SplashScreenPage(),
           '/started-page': (context) => const OnboardingPage(),
