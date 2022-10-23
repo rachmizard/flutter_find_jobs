@@ -12,7 +12,7 @@ class AuthService extends RequestAdapterService {
       };
 
       final response = await sendPostRequest(
-        "$baseURL/login",
+        "/login",
         body,
       );
 
@@ -22,6 +22,7 @@ class AuthService extends RequestAdapterService {
 
       return null;
     } catch (e) {
+      print(e);
       return null;
     }
   }
@@ -37,7 +38,7 @@ class AuthService extends RequestAdapterService {
       };
 
       final response = await sendPostRequest(
-        "$baseURL/register",
+        "/register",
         body,
       );
 

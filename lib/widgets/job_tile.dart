@@ -27,7 +27,7 @@ class JobTile extends StatelessWidget {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(
+                Image.network(
                   imageUrl,
                   width: 45,
                   height: 45,

@@ -1,24 +1,30 @@
 import 'package:http/http.dart' as http;
 
 class RequestAdapterService {
-  final String baseURL = "https://bwa-jobs.herokuapp.com";
+  final String baseURL = "bwa-jobs.herokuapp.com";
   final http.Client _client = http.Client();
 
-  Future<http.Response> sendGetRequest(String uri) async {
-    return _client.get(Uri.parse(uri));
+  Future<http.Response> sendGetRequest(
+      {String? uri, Map<String, dynamic>? queryParameters}) async {
+    return _client.get(Uri.https(baseURL, uri!, queryParameters));
   }
 
   Future<http.Response> sendPostRequest(
       String uri, Map<String, dynamic> body) async {
-    return _client.post(Uri.parse(uri), body: body);
+    return _client.post(
+        Uri.https(
+          baseURL,
+          uri,
+        ),
+        body: body);
   }
 
   Future<http.Response> sendPutRequest(
       String uri, Map<String, dynamic> body) async {
-    return _client.put(Uri.parse(uri), body: body);
+    return _client.put(Uri.https(baseURL, uri), body: body);
   }
 
   Future<http.Response> sendDeleteRequest(String uri) async {
-    return _client.delete(Uri.parse(uri));
+    return _client.delete(Uri.https(baseURL, uri));
   }
 }

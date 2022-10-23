@@ -1,5 +1,4 @@
 import 'package:find_jobs/providers/auth_provider.dart';
-import 'package:find_jobs/providers/category_provider.dart';
 import 'package:find_jobs/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +24,6 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
-        ChangeNotifierProvider(create: (_) => CategoryProvider()),
       ],
       child: MaterialApp(
         routes: {

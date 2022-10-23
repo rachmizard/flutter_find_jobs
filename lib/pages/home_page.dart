@@ -1,10 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:find_jobs/models/job_category_model.dart';
+import 'package:find_jobs/models/job_model.dart';
 import 'package:find_jobs/models/user_model.dart';
 import 'package:find_jobs/providers/auth_provider.dart';
-import 'package:find_jobs/providers/category_provider.dart';
 import 'package:find_jobs/providers/user_provider.dart';
+import 'package:find_jobs/services/job_service.dart';
 import 'package:find_jobs/theme.dart';
 import 'package:find_jobs/widgets/hot_job_category_card.dart';
 import 'package:find_jobs/widgets/job_tile.dart';
@@ -26,45 +27,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     var authProvider = Provider.of<AuthProvider>(context);
     var userProvider = Provider.of<UserProvider>(context);
-    var categoryProvider = Provider.of<CategoryProvider>(context);
-
-    final List<JobCategoryModel> hotCategories = [
-      JobCategoryModel(
-          id: 'AcqRCVW208yiY1bgKpFT',
-          imageUrl: 'assets/images/bg.png',
-          name: 'Website Developer',
-          subtitle: "1,350 jobs available",
-          createdAt: 1618959950809,
-          updatedAt: 1618959950809),
-      JobCategoryModel(
-          id: UniqueKey().toString(),
-          imageUrl: 'assets/images/job_1.png',
-          name: 'Mobile Developer',
-          subtitle: "2,400 jobs available",
-          createdAt: 1618959950809,
-          updatedAt: 1618959950809),
-      JobCategoryModel(
-          id: UniqueKey().toString(),
-          imageUrl: 'assets/images/job_2.png',
-          name: 'App Designer',
-          subtitle: "1,200 jobs available",
-          createdAt: 1618959950809,
-          updatedAt: 1618959950809),
-      JobCategoryModel(
-          id: UniqueKey().toString(),
-          imageUrl: 'assets/images/job_3.png',
-          name: 'Content Writer',
-          subtitle: "1,200 jobs available",
-          createdAt: 1618959950809,
-          updatedAt: 1618959950809),
-      JobCategoryModel(
-          id: UniqueKey().toString(),
-          imageUrl: 'assets/images/job_4.png',
-          name: 'Video Grapher',
-          subtitle: "1,200 jobs available",
-          createdAt: 1618959950809,
-          updatedAt: 1618959950809),
-    ];
+    JobService jobService = JobService();
 
     Widget header() {
       return Padding(
@@ -104,44 +67,43 @@ class _HomePageState extends State<HomePage> {
 
     Widget jobCardList() {
       return FutureBuilder<List<JobCategoryModel>>(
-          future: categoryProvider.getCategories(),
+          future: jobService.getCategories(),
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return SingleChildScrollView(
-                dragStartBehavior: DragStartBehavior.down,
-                scrollDirection: Axis.horizontal,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: Row(
-                    children: snapshot.data!.map((category) {
-                      return Row(
-                        children: [
-                          HotJobCategoryCard(
-                            onTap: () => Navigator.pushNamed(
-                                context, '/job-category-detail',
-                                arguments: JobCategoryModel(
-                                    id: category.id,
-                                    imageUrl: category.imageUrl,
-                                    name: category.name,
-                                    subtitle: category.subtitle,
-                                    createdAt: category.createdAt,
-                                    updatedAt: category.updatedAt)),
-                            imageUrl: category.imageUrl!,
-                            title: category.name!,
-                          ),
-                          SizedBox(
-                            width: 16,
-                          )
-                        ],
-                      );
-                    }).toList(),
-                  ),
-                ),
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
               );
             }
 
-            return Center(
-              child: CircularProgressIndicator(),
+            return SingleChildScrollView(
+              dragStartBehavior: DragStartBehavior.down,
+              scrollDirection: Axis.horizontal,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Row(
+                  children: snapshot.data!.map((category) {
+                    return Row(
+                      children: [
+                        HotJobCategoryCard(
+                          onTap: () => Navigator.pushNamed(
+                              context, '/job-category-detail',
+                              arguments: JobCategoryModel(
+                                  id: category.id,
+                                  imageUrl: category.imageUrl,
+                                  name: category.name,
+                                  createdAt: category.createdAt,
+                                  updatedAt: category.updatedAt)),
+                          imageUrl: category.imageUrl!,
+                          title: category.name!,
+                        ),
+                        SizedBox(
+                          width: 16,
+                        )
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ),
             );
           });
     }
@@ -168,42 +130,35 @@ class _HomePageState extends State<HomePage> {
           Section(title: "Just Posted", children: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                children: [
-                  JobTile(
-                      onTap: () =>
-                          Navigator.of(context).pushNamed('/job-detail'),
-                      jobTitle: 'Front-end Developer',
-                      company: 'Google',
-                      imageUrl: 'assets/images/google_icon.png'),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  JobTile(
-                      onTap: () =>
-                          Navigator.of(context).pushNamed('/job-detail'),
-                      jobTitle: 'UI Designer',
-                      company: 'Instagram',
-                      imageUrl: 'assets/images/instagram_icon.png'),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  JobTile(
-                      onTap: () =>
-                          Navigator.of(context).pushNamed('/job-detail'),
-                      jobTitle: 'Data Scientist',
-                      company: 'Facebook',
-                      imageUrl: 'assets/images/facebook_icon.png'),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  JobTile(
-                      onTap: () =>
-                          Navigator.of(context).pushNamed('/job-detail'),
-                      jobTitle: 'React Developer',
-                      company: 'Facebook',
-                      imageUrl: 'assets/images/facebook_icon.png')
-                ],
+              child: FutureBuilder<List<JobModel>>(
+                future: jobService.getJobs(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  return Column(
+                    children: snapshot.data!
+                        .map(
+                          (job) => Column(
+                            children: [
+                              JobTile(
+                                  onTap: () => Navigator.of(context)
+                                      .pushNamed('/job-detail'),
+                                  jobTitle: job.name!,
+                                  company: job.companyName!,
+                                  imageUrl: job.companyLogo!),
+                              SizedBox(
+                                height: 16,
+                              )
+                            ],
+                          ),
+                        )
+                        .toList(),
+                  );
+                },
               ),
             )
           ]),
