@@ -51,7 +51,6 @@ class _TextInputGroupState extends State<TextInputGroup> {
           height: 8,
         ),
         TextFormField(
-          autovalidateMode: AutovalidateMode.disabled,
           controller: controller,
           obscureText: widget.obscureText,
           validator: widget.validator,

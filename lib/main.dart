@@ -1,4 +1,7 @@
+import 'package:find_jobs/providers/auth_provider.dart';
+import 'package:find_jobs/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:find_jobs/pages/home_page.dart';
 import 'package:find_jobs/pages/job_category_detail_page.dart';
@@ -17,17 +20,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      routes: {
-        '/': (context) => const SplashScreenPage(),
-        '/started-page': (context) => const OnboardingPage(),
-        '/sign-in': (context) => const SigninPage(),
-        '/sign-up': (context) => const SignupPage(),
-        '/home': (context) => const HomePage(),
-        '/job-category-detail': (context) => const JobCategoryDetailPage(),
-        '/job-detail': (context) => const JobDetailPage(),
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+      ],
+      child: MaterialApp(
+        routes: {
+          '/': (context) => const SplashScreenPage(),
+          '/started-page': (context) => const OnboardingPage(),
+          '/sign-in': (context) => const SigninPage(),
+          '/sign-up': (context) => const SignupPage(),
+          '/home': (context) => const HomePage(),
+          '/job-category-detail': (context) => const JobCategoryDetailPage(),
+          '/job-detail': (context) => const JobDetailPage(),
+        },
+      ),
     );
   }
 }

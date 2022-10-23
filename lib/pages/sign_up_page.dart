@@ -1,12 +1,20 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:find_jobs/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:validators/validators.dart';
+
+import 'package:find_jobs/models/user_model.dart';
+
+import 'package:find_jobs/providers/auth_provider.dart';
+
 import 'package:find_jobs/theme.dart';
+
 import 'package:find_jobs/widgets/buttons/primary_button.dart';
 import 'package:find_jobs/widgets/buttons/secondary_button.dart';
 import 'package:find_jobs/widgets/inputs/text_input_group.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:validators/validators.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -19,10 +27,12 @@ class _SignupPageState extends State<SignupPage> {
   final _formKey = GlobalKey<FormState>();
 
   bool isImageUploaded = false;
-  String _fullName = '';
-  String _email = '';
-  String _password = '';
-  String _yourGoal = '';
+  Map<String, dynamic> authPayload = {
+    'name': '',
+    'email': '',
+    'password': '',
+    'goal': '',
+  };
 
   bool isSubmitting = false;
 
@@ -36,72 +46,88 @@ class _SignupPageState extends State<SignupPage> {
     super.dispose();
   }
 
-  void _submit() {
-    if (_formKey.currentState!.validate()) {
+  @override
+  Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserProvider userProvider = Provider.of<UserProvider>(context);
+
+    void navigateToHome() {
+      Navigator.pushReplacementNamed(context, '/home');
+    }
+
+    void showMessage(String message) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+        ),
+      );
+    }
+
+    void onSubmit() async {
+      if (_formKey.currentState!.validate()) return;
+
+      _formKey.currentState!.save();
+
       setState(() {
         isSubmitting = true;
       });
 
+      UserModel? response = await authProvider.signUp(authPayload['email'],
+          authPayload['password'], authPayload['name'], authPayload['goal']);
+
       setState(() {
-        _formKey.currentState!.save();
+        isSubmitting = false;
       });
 
-      print({
-        'full_name': _fullName,
-        'email': _email,
-        'password': _password,
-        'your_goal': _yourGoal,
-      });
+      if (response != null) {
+        userProvider.user = response;
 
-      Future.delayed(const Duration(seconds: 3), () {
-        setState(() {
-          isSubmitting = false;
-        });
+        showMessage('Sign up success');
+        return navigateToHome();
+      }
 
-        Navigator.of(context).pushReplacementNamed('/home');
-      });
+      if (response == null) {
+        return showMessage('Sign up failed');
+      }
     }
-  }
 
-  Widget uploadImageWidget() {
-    return GestureDetector(
-      onTap: (() => setState(() {
-            isImageUploaded = !isImageUploaded;
-          })),
-      child: Column(
-        children: [
-          Container(
-            width: 120,
-            height: 120,
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              border: Border.all(color: const Color(0xff4141A4)),
-              borderRadius: BorderRadius.circular(100),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(100),
-              child: Image(
-                image: AssetImage(isImageUploaded
-                    ? 'assets/images/user_pic.png'
-                    : 'assets/images/icon_upload.png'),
+    Widget uploadImageWidget() {
+      return GestureDetector(
+        onTap: (() => setState(() {
+              isImageUploaded = !isImageUploaded;
+            })),
+        child: Column(
+          children: [
+            Container(
+              width: 120,
+              height: 120,
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                border: Border.all(color: const Color(0xff4141A4)),
+                borderRadius: BorderRadius.circular(100),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(100),
+                child: Image(
+                  image: AssetImage(isImageUploaded
+                      ? 'assets/images/user_pic.png'
+                      : 'assets/images/icon_upload.png'),
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            isImageUploaded ? 'Change Photo' : 'Upload Photo',
-            style: GoogleFonts.poppins(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
+            const SizedBox(height: 10),
+            Text(
+              isImageUploaded ? 'Change Photo' : 'Upload Photo',
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
+    }
 
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -143,8 +169,8 @@ class _SignupPageState extends State<SignupPage> {
                         children: [
                           TextInputGroup(
                               label: "Full Name",
-                              initialValue: _fullName,
-                              onSaved: (fullName) => _fullName = fullName!,
+                              initialValue: authPayload['name'],
+                              onSaved: (name) => authPayload['name'] = name!,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "Full Name is required";
@@ -157,8 +183,8 @@ class _SignupPageState extends State<SignupPage> {
                           ),
                           TextInputGroup(
                               label: "Email Address",
-                              initialValue: _email,
-                              onSaved: (email) => _email = email!,
+                              initialValue: authPayload['email'],
+                              onSaved: (email) => authPayload['email'] = email!,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "Email address is required";
@@ -175,8 +201,9 @@ class _SignupPageState extends State<SignupPage> {
                           ),
                           TextInputGroup(
                               label: "Password",
-                              initialValue: _password,
-                              onSaved: (password) => _password = password!,
+                              initialValue: authPayload['password'],
+                              onSaved: (password) =>
+                                  authPayload['password'] = password!,
                               obscureText: true,
                               validator: (value) {
                                 if (isNull(value!)) {
@@ -194,8 +221,8 @@ class _SignupPageState extends State<SignupPage> {
                           ),
                           TextInputGroup(
                               label: "Your Goal",
-                              initialValue: _yourGoal,
-                              onSaved: (yourGoal) => _yourGoal = yourGoal!,
+                              initialValue: authPayload['goal'],
+                              onSaved: (goal) => authPayload['goal'] = goal!,
                               validator: (value) {
                                 if (isNull(value!)) {
                                   return "Your Goal is required";
@@ -208,7 +235,7 @@ class _SignupPageState extends State<SignupPage> {
                           ),
                           Column(children: [
                             PrimaryButton(
-                                onPressed: _submit,
+                                onPressed: onSubmit,
                                 text: "Sign Up",
                                 isLoading: isSubmitting),
                             SizedBox(

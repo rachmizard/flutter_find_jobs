@@ -1,22 +1,33 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-
 import 'package:find_jobs/models/job_category_model.dart';
-
+import 'package:find_jobs/models/user_model.dart';
+import 'package:find_jobs/providers/auth_provider.dart';
+import 'package:find_jobs/providers/user_provider.dart';
 import 'package:find_jobs/theme.dart';
-
 import 'package:find_jobs/widgets/hot_job_category_card.dart';
 import 'package:find_jobs/widgets/job_tile.dart';
 import 'package:find_jobs/widgets/rounded_image.dart';
 import 'package:find_jobs/widgets/section.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
   Widget build(BuildContext context) {
+    var authProvider = Provider.of<AuthProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
+
+    print('authprovider ${authProvider.isLogin}');
+
     final List<JobCategoryModel> hotCategories = [
       JobCategoryModel(
           id: 'AcqRCVW208yiY1bgKpFT',
@@ -66,17 +77,25 @@ class HomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Howdy',
+                  userProvider.user.email ?? "",
                   style: titleTextStyle,
                 ),
                 Text(
-                  'Jason Powell',
+                  userProvider.user.name ?? "",
                   style: subtitleTextStyle,
                 ),
               ],
             ),
-            const RoundedImage(
-              imageUrl: 'assets/images/user_pic.png',
+            InkWell(
+              onTap: () {
+                authProvider.isLogin = false;
+                userProvider.user = UserModel();
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/sign-in', (route) => false);
+              },
+              child: const RoundedImage(
+                imageUrl: 'assets/images/user_pic.png',
+              ),
             )
           ],
         ),

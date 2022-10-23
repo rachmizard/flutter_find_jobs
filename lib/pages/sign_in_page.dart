@@ -1,6 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:find_jobs/models/user_model.dart';
+import 'package:find_jobs/providers/auth_provider.dart';
+import 'package:find_jobs/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:validators/validators.dart';
 
 import 'package:find_jobs/theme.dart';
@@ -16,39 +20,65 @@ class SigninPage extends StatefulWidget {
 }
 
 class _SigninPageState extends State<SigninPage> {
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
-  String _email = '';
-  String _password = '';
+  Map<String, dynamic> authPayload = {
+    'email': '',
+    'password': '',
+  };
   bool isSubmitting = false;
-
-  void _submit() {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        isSubmitting = true;
-      });
-
-      setState(() {
-        _formKey.currentState!.save();
-
-        print({
-          'email': _email,
-          'password': _password,
-        });
-      });
-
-      Future.delayed(const Duration(seconds: 3), () {
-        setState(() {
-          isSubmitting = false;
-        });
-
-        Navigator.of(context).pushReplacementNamed('/home');
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
+    var authProvider = Provider.of<AuthProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
+
+    void navigateToHome() {
+      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+    }
+
+    void showMessage(String message) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+        ),
+      );
+    }
+
+    void onSubmit() async {
+      try {
+        if (!formKey.currentState!.validate()) return;
+        formKey.currentState!.save();
+
+        setState(() {
+          isSubmitting = true;
+        });
+
+        UserModel? response = await authProvider.signIn(
+            authPayload['email'], authPayload['password']!);
+
+        if (response != null) {
+          userProvider.user = response;
+
+          showMessage('Sign in success');
+          navigateToHome();
+        }
+
+        if (response == null) {
+          showMessage("Email or password is incorrect");
+        }
+      } catch (e) {
+        setState(() {
+          isSubmitting = false;
+        });
+        showMessage(e.toString());
+      } finally {
+        setState(() {
+          isSubmitting = false;
+        });
+      }
+    }
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -87,14 +117,13 @@ class _SigninPageState extends State<SigninPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Form(
-                      autovalidateMode: AutovalidateMode.always,
-                      key: _formKey,
+                      key: formKey,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           TextInputGroup(
                               label: "Email Address",
-                              onSaved: (email) => _email = email!,
+                              onSaved: (email) => authPayload['email'] = email!,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "Email address is required";
@@ -111,7 +140,8 @@ class _SigninPageState extends State<SigninPage> {
                           ),
                           TextInputGroup(
                               label: "Password",
-                              onSaved: (password) => _password = password!,
+                              onSaved: (password) =>
+                                  authPayload['password'] = password!,
                               obscureText: true,
                               validator: (value) {
                                 if (isNull(value!)) {
@@ -129,7 +159,7 @@ class _SigninPageState extends State<SigninPage> {
                           ),
                           Column(children: [
                             PrimaryButton(
-                              onPressed: _submit,
+                              onPressed: onSubmit,
                               text: "Sign In",
                               isLoading: isSubmitting,
                             ),
