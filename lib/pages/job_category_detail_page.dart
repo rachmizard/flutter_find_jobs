@@ -41,16 +41,22 @@ class JobCategoryDetailPage extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 24),
                           child: Column(
-                            children: const [
+                            children: [
                               JobTile(
+                                  onTap: () => Navigator.of(context)
+                                      .pushNamed('/job-detail'),
                                   jobTitle: 'Front-end Developer',
                                   company: 'Google',
                                   imageUrl: 'assets/images/google_icon.png'),
                               JobTile(
+                                  onTap: () => Navigator.of(context)
+                                      .pushNamed('/job-detail'),
                                   jobTitle: 'React Developer',
                                   company: 'Facebook',
                                   imageUrl: 'assets/images/facebook_icon.png'),
                               JobTile(
+                                  onTap: () => Navigator.of(context)
+                                      .pushNamed('/job-detail'),
                                   jobTitle: 'Full Stack Engineer Developer',
                                   company: 'Instagram',
                                   imageUrl: 'assets/images/instagram_icon.png'),
@@ -65,16 +71,22 @@ class JobCategoryDetailPage extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 24),
                           child: Column(
-                            children: const [
+                            children: [
                               JobTile(
+                                  onTap: () => Navigator.of(context)
+                                      .pushNamed('/job-detail'),
                                   jobTitle: 'Front-end Developer',
                                   company: 'Google',
                                   imageUrl: 'assets/images/google_icon.png'),
                               JobTile(
+                                  onTap: () => Navigator.of(context)
+                                      .pushNamed('/job-detail'),
                                   jobTitle: 'React Developer',
                                   company: 'Facebook',
                                   imageUrl: 'assets/images/facebook_icon.png'),
                               JobTile(
+                                  onTap: () => Navigator.of(context)
+                                      .pushNamed('/job-detail'),
                                   jobTitle: 'Full Stack Engineer Developer',
                                   company: 'Instagram',
                                   imageUrl: 'assets/images/instagram_icon.png'),

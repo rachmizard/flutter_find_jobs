@@ -42,7 +42,7 @@ class _SigninPageState extends State<SigninPage> {
           isSubmitting = false;
         });
 
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.of(context).pushReplacementNamed('/home');
       });
     }
   }

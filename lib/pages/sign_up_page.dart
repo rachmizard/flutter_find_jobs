@@ -58,7 +58,7 @@ class _SignupPageState extends State<SignupPage> {
           isSubmitting = false;
         });
 
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.of(context).pushReplacementNamed('/home');
       });
     }
   }
