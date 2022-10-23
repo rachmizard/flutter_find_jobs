@@ -123,6 +123,7 @@ class _HomePageState extends State<HomePage> {
                                     id: category.id,
                                     imageUrl: category.imageUrl,
                                     name: category.name,
+                                    subtitle: category.subtitle,
                                     createdAt: category.createdAt,
                                     updatedAt: category.updatedAt)),
                             imageUrl: category.imageUrl!,

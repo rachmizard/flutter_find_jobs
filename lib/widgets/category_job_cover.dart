@@ -64,7 +64,7 @@ class CategoryJobCover extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      subtitle ?? "",
+                      subtitle ?? "WKWKWKWK",
                       style: GoogleFonts.poppins(
                         fontSize: 16,
                         fontWeight: FontWeight.w400,
