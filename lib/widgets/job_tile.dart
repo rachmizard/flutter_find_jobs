@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class PostedJobTile extends StatelessWidget {
+class JobTile extends StatelessWidget {
   final String jobTitle;
   final String company;
   final String imageUrl;
 
-  const PostedJobTile(
+  const JobTile(
       {super.key,
       required this.jobTitle,
       required this.company,

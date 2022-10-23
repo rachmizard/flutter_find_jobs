@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class JobCard extends StatelessWidget {
+class HotJobCategoryCard extends StatelessWidget {
   final String imageUrl;
   final String title;
   final FutureOr<void> Function() onTap;
 
-  const JobCard(
+  const HotJobCategoryCard(
       {super.key,
       required this.imageUrl,
       required this.title,

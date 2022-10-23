@@ -7,8 +7,8 @@ import 'package:find_jobs/models/job_category_model.dart';
 
 import 'package:find_jobs/theme.dart';
 
-import 'package:find_jobs/widgets/job_card.dart';
-import 'package:find_jobs/widgets/posted_job_tile.dart';
+import 'package:find_jobs/widgets/hot_job_category_card.dart';
+import 'package:find_jobs/widgets/job_tile.dart';
 import 'package:find_jobs/widgets/rounded_image.dart';
 import 'package:find_jobs/widgets/section.dart';
 
@@ -93,7 +93,7 @@ class HomePage extends StatelessWidget {
             children: hotCategories.map((category) {
               return Row(
                 children: [
-                  JobCard(
+                  HotJobCategoryCard(
                     onTap: () => Navigator.pushNamed(
                         context, '/job-category-detail',
                         arguments: JobCategoryModel(
@@ -141,28 +141,28 @@ class HomePage extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 children: const [
-                  PostedJobTile(
+                  JobTile(
                       jobTitle: 'Front-end Developer',
                       company: 'Google',
                       imageUrl: 'assets/images/google_icon.png'),
                   SizedBox(
                     height: 16,
                   ),
-                  PostedJobTile(
+                  JobTile(
                       jobTitle: 'UI Designer',
                       company: 'Instagram',
                       imageUrl: 'assets/images/instagram_icon.png'),
                   SizedBox(
                     height: 16,
                   ),
-                  PostedJobTile(
+                  JobTile(
                       jobTitle: 'Data Scientist',
                       company: 'Facebook',
                       imageUrl: 'assets/images/facebook_icon.png'),
                   SizedBox(
                     height: 16,
                   ),
-                  PostedJobTile(
+                  JobTile(
                       jobTitle: 'React Developer',
                       company: 'Facebook',
                       imageUrl: 'assets/images/facebook_icon.png')

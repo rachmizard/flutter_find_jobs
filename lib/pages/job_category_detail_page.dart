@@ -2,7 +2,7 @@
 
 import 'package:find_jobs/models/job_category_model.dart';
 import 'package:find_jobs/widgets/category_job_cover.dart';
-import 'package:find_jobs/widgets/posted_job_tile.dart';
+import 'package:find_jobs/widgets/job_tile.dart';
 import 'package:find_jobs/widgets/section.dart';
 import 'package:flutter/material.dart';
 
@@ -42,15 +42,15 @@ class JobCategoryDetailPage extends StatelessWidget {
                           padding: EdgeInsets.symmetric(horizontal: 24),
                           child: Column(
                             children: const [
-                              PostedJobTile(
+                              JobTile(
                                   jobTitle: 'Front-end Developer',
                                   company: 'Google',
                                   imageUrl: 'assets/images/google_icon.png'),
-                              PostedJobTile(
+                              JobTile(
                                   jobTitle: 'React Developer',
                                   company: 'Facebook',
                                   imageUrl: 'assets/images/facebook_icon.png'),
-                              PostedJobTile(
+                              JobTile(
                                   jobTitle: 'Full Stack Engineer Developer',
                                   company: 'Instagram',
                                   imageUrl: 'assets/images/instagram_icon.png'),
@@ -66,15 +66,15 @@ class JobCategoryDetailPage extends StatelessWidget {
                           padding: EdgeInsets.symmetric(horizontal: 24),
                           child: Column(
                             children: const [
-                              PostedJobTile(
+                              JobTile(
                                   jobTitle: 'Front-end Developer',
                                   company: 'Google',
                                   imageUrl: 'assets/images/google_icon.png'),
-                              PostedJobTile(
+                              JobTile(
                                   jobTitle: 'React Developer',
                                   company: 'Facebook',
                                   imageUrl: 'assets/images/facebook_icon.png'),
-                              PostedJobTile(
+                              JobTile(
                                   jobTitle: 'Full Stack Engineer Developer',
                                   company: 'Instagram',
                                   imageUrl: 'assets/images/instagram_icon.png'),
