@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:find_jobs/widgets/applied_job_alert.dart';
 import 'package:find_jobs/widgets/buttons/primary_button.dart';
 import 'package:find_jobs/widgets/job_qualification_section.dart';
 import 'package:flutter/material.dart';
@@ -81,7 +82,10 @@ class JobDetailPage extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 10, right: 80, left: 80),
-          child: PrimaryButton(onPressed: () {}, text: "Apply for Job"),
+          child: PrimaryButton(
+              onPressed: () {},
+              text: "Apply for Job",
+              colorScheme: PrimaryButtonColorScheme.primary),
         ),
         TextButton(
             onPressed: () {},
@@ -107,10 +111,17 @@ class JobDetailPage extends StatelessWidget {
       body: SafeArea(
           child: SingleChildScrollView(
         child: Container(
-          padding: const EdgeInsets.only(top: 80),
+          padding: const EdgeInsets.only(top: 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Center(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.only(left: 24, right: 24, bottom: 30),
+                  child: AppliedJobAlert(),
+                ),
+              ),
               header(),
               Padding(
                   padding: const EdgeInsets.only(
