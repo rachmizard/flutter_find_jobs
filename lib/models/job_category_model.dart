@@ -1,12 +1,16 @@
 class JobCategoryModel {
-  String? id;
-  String? imageUrl;
-  String? name;
-  int? createdAt;
-  int? updatedAt;
+  late String id;
+  late String imageUrl;
+  late String name;
+  late int createdAt;
+  late int updatedAt;
 
   JobCategoryModel(
-      {this.id, this.imageUrl, this.name, this.createdAt, this.updatedAt});
+      {required this.id,
+      required this.imageUrl,
+      required this.name,
+      required this.createdAt,
+      required this.updatedAt});
 
   JobCategoryModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];

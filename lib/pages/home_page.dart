@@ -87,14 +87,8 @@ class _HomePageState extends State<HomePage> {
                         HotJobCategoryCard(
                           onTap: () => Navigator.pushNamed(
                               context, '/job-category-detail',
-                              arguments: JobCategoryModel(
-                                  id: category.id,
-                                  imageUrl: category.imageUrl,
-                                  name: category.name,
-                                  createdAt: category.createdAt,
-                                  updatedAt: category.updatedAt)),
-                          imageUrl: category.imageUrl!,
-                          title: category.name!,
+                              arguments: category),
+                          category: category,
                         ),
                         SizedBox(
                           width: 16,
@@ -147,9 +141,7 @@ class _HomePageState extends State<HomePage> {
                               JobTile(
                                   onTap: () => Navigator.of(context)
                                       .pushNamed('/job-detail'),
-                                  jobTitle: job.name!,
-                                  company: job.companyName!,
-                                  imageUrl: job.companyLogo!),
+                                  job: job),
                               SizedBox(
                                 height: 16,
                               )

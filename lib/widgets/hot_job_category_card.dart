@@ -1,18 +1,15 @@
 import 'dart:async';
 
+import 'package:find_jobs/models/job_category_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HotJobCategoryCard extends StatelessWidget {
-  final String imageUrl;
-  final String title;
+  final JobCategoryModel category;
   final FutureOr<void> Function() onTap;
 
   const HotJobCategoryCard(
-      {super.key,
-      required this.imageUrl,
-      required this.title,
-      required this.onTap});
+      {super.key, required this.onTap, required this.category});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +22,7 @@ class HotJobCategoryCard extends StatelessWidget {
           color: const Color(0xffF6F7F8),
           borderRadius: BorderRadius.circular(12),
           image: DecorationImage(
-            image: NetworkImage(imageUrl),
+            image: NetworkImage(category.imageUrl),
             fit: BoxFit.cover,
           ),
           gradient: LinearGradient(
@@ -42,7 +39,7 @@ class HotJobCategoryCard extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(left: 16, right: 41, bottom: 16),
             child: Text(
-              title,
+              category.name,
               style: GoogleFonts.poppins(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,

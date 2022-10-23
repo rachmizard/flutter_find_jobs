@@ -1,20 +1,14 @@
 import 'dart:async';
 
+import 'package:find_jobs/models/job_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class JobTile extends StatelessWidget {
-  final String jobTitle;
-  final String company;
-  final String imageUrl;
+  final JobModel job;
   final FutureOr<void> Function() onTap;
 
-  const JobTile(
-      {super.key,
-      required this.jobTitle,
-      required this.company,
-      required this.imageUrl,
-      required this.onTap});
+  const JobTile({super.key, required this.onTap, required this.job});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +22,7 @@ class JobTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Image.network(
-                  imageUrl,
+                  job.companyLogo,
                   width: 45,
                   height: 45,
                 ),
@@ -40,14 +34,14 @@ class JobTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        jobTitle,
+                        job.name,
                         style: GoogleFonts.poppins(
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                       Text(
-                        company,
+                        job.companyName,
                         style: GoogleFonts.poppins(
                           color: const Color(0xffB3B5C4),
                           fontSize: 14,
