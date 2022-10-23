@@ -6,8 +6,33 @@ import 'package:find_jobs/widgets/job_qualification_section.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class JobDetailPage extends StatelessWidget {
+class JobDetailPage extends StatefulWidget {
   const JobDetailPage({super.key});
+
+  @override
+  State<JobDetailPage> createState() => _JobDetailPageState();
+}
+
+class _JobDetailPageState extends State<JobDetailPage> {
+  bool isApplied = false;
+
+  @override
+  void initState() {
+    super.initState();
+    isApplied = false;
+  }
+
+  void _applyJob() {
+    setState(() {
+      isApplied = true;
+    });
+  }
+
+  void _cancelApplyJob() {
+    setState(() {
+      isApplied = false;
+    });
+  }
 
   Widget header() {
     return Column(
@@ -82,10 +107,15 @@ class JobDetailPage extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 10, right: 80, left: 80),
-          child: PrimaryButton(
-              onPressed: () {},
-              text: "Apply for Job",
-              colorScheme: PrimaryButtonColorScheme.primary),
+          child: isApplied
+              ? PrimaryButton(
+                  onPressed: () => _cancelApplyJob(),
+                  text: "Cancel Apply",
+                  colorScheme: PrimaryButtonColorScheme.danger)
+              : PrimaryButton(
+                  onPressed: () => _applyJob(),
+                  text: "Apply for Job",
+                  colorScheme: PrimaryButtonColorScheme.primary),
         ),
         TextButton(
             onPressed: () {},
@@ -116,11 +146,13 @@ class JobDetailPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.only(left: 24, right: 24, bottom: 30),
-                  child: AppliedJobAlert(),
-                ),
+                child: isApplied
+                    ? Padding(
+                        padding: const EdgeInsets.only(
+                            left: 24, right: 24, bottom: 30),
+                        child: AppliedJobAlert(),
+                      )
+                    : Container(),
               ),
               header(),
               Padding(
