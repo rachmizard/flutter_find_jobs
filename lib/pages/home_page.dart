@@ -26,8 +26,6 @@ class _HomePageState extends State<HomePage> {
     var authProvider = Provider.of<AuthProvider>(context);
     var userProvider = Provider.of<UserProvider>(context);
 
-    print('authprovider ${authProvider.isLogin}');
-
     final List<JobCategoryModel> hotCategories = [
       JobCategoryModel(
           id: 'AcqRCVW208yiY1bgKpFT',

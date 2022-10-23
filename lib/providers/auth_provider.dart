@@ -38,7 +38,6 @@ class AuthProvider with ChangeNotifier {
 
       if (response != null) {
         isLogin = true;
-
         return response;
       }
 

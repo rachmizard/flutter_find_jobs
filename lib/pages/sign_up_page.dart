@@ -64,30 +64,35 @@ class _SignupPageState extends State<SignupPage> {
     }
 
     void onSubmit() async {
-      if (_formKey.currentState!.validate()) return;
+      try {
+        if (!_formKey.currentState!.validate()) return;
+        _formKey.currentState!.save();
 
-      _formKey.currentState!.save();
+        setState(() {
+          isSubmitting = true;
+        });
 
-      setState(() {
-        isSubmitting = true;
-      });
+        UserModel? response = await authProvider.signUp(authPayload['email'],
+            authPayload['password'], authPayload['name'], authPayload['goal']);
 
-      UserModel? response = await authProvider.signUp(authPayload['email'],
-          authPayload['password'], authPayload['name'], authPayload['goal']);
+        if (response != null) {
+          userProvider.user = response;
 
-      setState(() {
-        isSubmitting = false;
-      });
+          showMessage('Sign up success');
+          return navigateToHome();
+        }
 
-      if (response != null) {
-        userProvider.user = response;
-
-        showMessage('Sign up success');
-        return navigateToHome();
-      }
-
-      if (response == null) {
-        return showMessage('Sign up failed');
+        if (response == null) {
+          return showMessage('Sign up failed');
+        }
+      } catch (e) {
+        setState(() {
+          isSubmitting = false;
+        });
+      } finally {
+        setState(() {
+          isSubmitting = false;
+        });
       }
     }
 
@@ -169,7 +174,6 @@ class _SignupPageState extends State<SignupPage> {
                         children: [
                           TextInputGroup(
                               label: "Full Name",
-                              initialValue: authPayload['name'],
                               onSaved: (name) => authPayload['name'] = name!,
                               validator: (value) {
                                 if (value!.isEmpty) {
@@ -183,7 +187,6 @@ class _SignupPageState extends State<SignupPage> {
                           ),
                           TextInputGroup(
                               label: "Email Address",
-                              initialValue: authPayload['email'],
                               onSaved: (email) => authPayload['email'] = email!,
                               validator: (value) {
                                 if (value!.isEmpty) {
@@ -201,7 +204,6 @@ class _SignupPageState extends State<SignupPage> {
                           ),
                           TextInputGroup(
                               label: "Password",
-                              initialValue: authPayload['password'],
                               onSaved: (password) =>
                                   authPayload['password'] = password!,
                               obscureText: true,
@@ -221,7 +223,6 @@ class _SignupPageState extends State<SignupPage> {
                           ),
                           TextInputGroup(
                               label: "Your Goal",
-                              initialValue: authPayload['goal'],
                               onSaved: (goal) => authPayload['goal'] = goal!,
                               validator: (value) {
                                 if (isNull(value!)) {
